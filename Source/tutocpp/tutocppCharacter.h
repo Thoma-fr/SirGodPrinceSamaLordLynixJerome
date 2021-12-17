@@ -21,6 +21,14 @@ class AtutocppCharacter : public ACharacter
 
 public:
 	AtutocppCharacter();
+	UPROPERTY(EditAnywhere, Category = Spawn)
+		TSubclassOf<AActor> ActorSpawned;
+	UFUNCTION()
+		void RagdoLize();
+	UPROPERTY()
+		FTimerHandle spawnDelay;
+	UFUNCTION()
+		void Respawn();
 	UPROPERTY(EditAnywhere)
 		class USceneComponent* SceneComponent;
 	UPROPERTY(VisibleAnywhere)

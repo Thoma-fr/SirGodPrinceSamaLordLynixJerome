@@ -33,7 +33,10 @@ public:
 	UFUNCTION()
 		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 	UFUNCTION()
-		void Fire();
-	UFUNCTION()
 	void FireInDirection(const FVector& ShootDirection);
+
+	UFUNCTION()
+		void OnOverlapBegin(class AActor* OverlappedActor, class AActor* OtherActor);
+	UPROPERTY(EditAnywhere)
+		UMaterialInterface* DecallMat;
 };

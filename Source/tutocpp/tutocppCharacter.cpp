@@ -54,6 +54,33 @@ AtutocppCharacter::AtutocppCharacter()
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
 
+void AtutocppCharacter::RagdoLize()
+{
+	USkeletalMeshComponent* mesh = this->GetMesh();
+	mesh->SetSimulatePhysics(true);
+	mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	this->GetCharacterMovement()->DisableMovement();
+
+	/*AController* Controller = GetWorld()->GetFirstPlayerController();
+	if(Controller==nullptr)
+	{
+		return;
+	}
+	Controller->UnPossess();*/
+
+	GetWorldTimerManager().SetTimer(spawnDelay, this, &AtutocppCharacter::Respawn, 3, false);
+}
+
+void AtutocppCharacter::Respawn()
+{
+	AtutocppCharacter* Character = GetWorld()->SpawnActor<AtutocppCharacter>(ActorSpawned, FVector(-490.000000, 503.556580, 462.000671), FRotator(0,0,0));
+	AController* controller = GetWorld()->GetFirstPlayerController();
+	Controller->Possess(Character);
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -169,15 +196,6 @@ void AtutocppCharacter::OnStopRun()
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }
 
-//void AtutocppCharacter::OnStartCrouch()
-//{
-//	GetCharacterMovement()->Crouch(true);
-//}
-//
-//void AtutocppCharacter::OnStopCrounch()
-//{
-//	GetCharacterMovement()->Crouch(false);
-//}
 
 void AtutocppCharacter::OnResetVR()
 {
@@ -251,11 +269,12 @@ void AtutocppCharacter::HeathState(bool IsDamage,int Value)
 	else
 	{
 		Health += Value;
-		GLog->Log("Et la il vit");
+		GLog->Log("Et la il soigne");
 	}
 
 	if (Health <=0)
 	{
-		Destroy();
+		
+		
 	}
 }

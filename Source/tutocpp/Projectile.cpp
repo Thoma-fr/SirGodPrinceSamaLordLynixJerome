@@ -1,23 +1,14 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "Engine/DecalActor.h"
+#include "Components/DecalComponent.h"
 #include "Projectile.h"
 
 // Sets default values
 AProjectile::AProjectile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+
 	PrimaryActorTick.bCanEverTick = true;
-    //MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-    /*if (!ProjectileMeshComponent)
-    {
-        ProjectileMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ProjectileMeshComponent"));
-        static ConstructorHelpers::FObjectFinder<UStaticMesh>Mesh(TEXT("StaticMesh'/Game/Sphere.Sphere'"));
-        if (Mesh.Succeeded())
-        {
-            ProjectileMeshComponent->SetStaticMesh(Mesh.Object);
-        }
-    }*/
+
     if (!RootComponent)
     {
         CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
@@ -38,14 +29,15 @@ AProjectile::AProjectile()
         ProjectileMovementComponent->Bounciness = 0.3f;
         ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
     }
-    CollisionComponent->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
+    //OnActorBeginOverlap->OnComponentHit.AddDynamic(this, &AProjectile::OnOverlapBegin);
+    InitialLifeSpan = 5;
 }
 
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+    OnActorBeginOverlap.AddDynamic(this, &AProjectile::OnOverlapBegin);
 }
 
 // Called every frame
@@ -67,12 +59,20 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, U
 	GLog->Log("bullet go boing boing bing bong bong ");
 }
 
-void AProjectile::Fire()
-{
-}
 
 void AProjectile::FireInDirection(const FVector& ShootDirection)
 {
     ProjectileMovementComponent->Velocity = ShootDirection * ProjectileMovementComponent->InitialSpeed;
+}
+
+void AProjectile::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
+{
+    GLog->Log("bullet go boing boing bing bong bong ");
+    FRotator decallRot = GetActorRotation() + FRotator(-90, 0, 0);
+
+    ADecalActor* decal = GetWorld()->SpawnActor<ADecalActor>(GetActorLocation(), decallRot);
+    decal->SetDecalMaterial(DecallMat);
+    decal->GetDecal()->DecalSize - FVector(100, 100, 100);
+    decal->GetDecal()->SetFadeOut(1, 3, true);
 }
 
