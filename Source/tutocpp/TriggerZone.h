@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Engine/TriggerVolume.h"
+#include "tutocppCharacter.h"
 #include "TriggerZone.generated.h"
 
 UCLASS()
@@ -25,7 +25,12 @@ public:
 		void OnOverlapBegin(class AActor* OverlappedActor, class AActor* OtherActor);
 	UFUNCTION()
 		void OnOverlapEnd(class AActor* OverlappedActor, class AActor* OtherActor);
-		
+	UPROPERTY()
+		FTimerHandle UnusedHandle;
+	UPROPERTY(EditAnywhere)
+		bool isDamage;
+	UFUNCTION()
+		void IsDamageZone(AtutocppCharacter* Character);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

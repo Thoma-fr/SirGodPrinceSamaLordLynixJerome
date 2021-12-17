@@ -21,6 +21,10 @@ AtutocppCharacter::AtutocppCharacter()
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
 
+	JumpMaxCount = 2;
+
+	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Mesh"));
+	SceneComponent->SetupAttachment(RootComponent);
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -58,6 +62,16 @@ void AtutocppCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	check(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("Fire", IE_Pressed, this, &AtutocppCharacter::Fire);
+	if(isGrabbed)
+	{
+		
+	}
+	else
+	{
+		PlayerInputComponent->BindAction("Grab", IE_Pressed, this, &AtutocppCharacter::Attach);
+	}
+	
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AtutocppCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AtutocppCharacter::MoveRight);
@@ -78,7 +92,7 @@ void AtutocppCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AtutocppCharacter::OnResetVR);
 	PlayerInputComponent->BindAction("Run", IE_Pressed, this, & AtutocppCharacter::OnStartRun);
 	PlayerInputComponent->BindAction("Run", IE_Released, this, &AtutocppCharacter::OnStopRun);
-	PlayerInputComponent->BindKey("E", IE_Pressed, this, &AtutocppCharacter::OnEPressed);
+	//PlayerInputComponent->BindKey("E", IE_Pressed, this, &AtutocppCharacter::OnEPressed);
 	//PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AtutocppCharacter::OnStartCrouch);
 	//PlayerInputComponent->BindAction("Crouch", IE_Released, this, &AtutocppCharacter::OnStopCrounch);
 }
@@ -87,38 +101,62 @@ void AtutocppCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 void AtutocppCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
 	//GetCharacterMovement(WalkSpeed)
 }
 
-void AtutocppCharacter::OnEPressed()
+void AtutocppCharacter::Attach()
 {
-	GLog->Log("E");
+	
 	FHitResult OutHit;
 	FVector Start = FollowCamera->GetComponentLocation();
 	FVector ForwardVector = FollowCamera->GetForwardVector();
 	FVector End = ((ForwardVector * 1000.f) + Start);
 	FCollisionQueryParams CollisionParams;
+	CollisionParams.AddIgnoredActor(this);
 	DrawDebugLine(GetWorld(), Start, End, FColor::Green, true);
 
 	bool isHit = GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, CollisionParams);
-
-	if (isHit)
+	if(!isGrabbed)
 	{
-		if (OutHit.bBlockingHit)
+		
+	
+		if (isHit)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red, 
-				FString::Printf(TEXT("you are hitting: "), * OutHit.GetActor()->GetName()));
+			if (OutHit.bBlockingHit)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red,
+					FString::Printf(TEXT("you are hitting: "), *OutHit.GetActor()->GetName()));
+				GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red,
+					FString::Printf(TEXT("Impact Point: "), *OutHit.ImpactPoint.ToString()));
 
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red,
-				FString::Printf(TEXT("Impact Point: "), *OutHit.ImpactPoint.ToString()));
-
-			GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red,
-				FString::Printf(TEXT("impact normal: "), *OutHit.ImpactNormal.ToString()));
-
+				GEngine->AddOnScreenDebugMessage(-1, 1.f, FColor::Red,
+					FString::Printf(TEXT("impact normal: "), *OutHit.ImpactNormal.ToString()));
+				GrabbedActor = OutHit.GetActor();
+				
+				GrabbedActor->SetActorLocation(SceneComponent->GetComponentLocation());
+				GrabbedActor->AttachToComponent(SceneComponent, FAttachmentTransformRules::KeepWorldTransform);
+				OutHit.Component->SetSimulatePhysics(false);
+				isGrabbed=true;
+			}
 		}
+	}
+	else
+	{
+		UPrimitiveComponent* object = Cast<UPrimitiveComponent>(GrabbedActor->GetComponentByClass(UPrimitiveComponent::StaticClass()));
+		object->SetSimulatePhysics(true);
+		GrabbedActor->DetachFromActor(FDetachmentTransformRules::KeepRelativeTransform);
 	}
 }
 
+
+
+void AtutocppCharacter::Fire()
+{
+	GLog->Log("PAn PAn PAn Bang Ban Bang");
+	AProjectile* SpawnedActor = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, SceneComponent->GetComponentLocation(),SceneComponent->GetComponentRotation());
+
+}
 void AtutocppCharacter::OnStartRun()
 {
 	GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
@@ -208,6 +246,12 @@ void AtutocppCharacter::HeathState(bool IsDamage,int Value)
 		Health -= Value;
 		GLog->Log("Et la il meurt");
 	}
+	else
+	{
+		Health += Value;
+		GLog->Log("Et la il vit");
+	}
+
 	if (Health <=0)
 	{
 		Destroy();

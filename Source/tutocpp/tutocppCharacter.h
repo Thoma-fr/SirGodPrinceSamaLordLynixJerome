@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Projectile.h"
 #include "tutocppCharacter.generated.h"
 UCLASS(config=Game)
 class AtutocppCharacter : public ACharacter
@@ -20,6 +21,8 @@ class AtutocppCharacter : public ACharacter
 
 public:
 	AtutocppCharacter();
+	UPROPERTY()
+		class USceneComponent* SceneComponent;
 	UPROPERTY(VisibleAnywhere)
 		class UStaticMeshComponent* MeshComponent;
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
@@ -31,6 +34,11 @@ public:
 	float BaseLookUpRate;
 	UPROPERTY(EditAnywhere)
 		int Health = 100;
+	UPROPERTY()
+		bool isGrabbed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		FVector MuzzleOffset;
+
 	UFUNCTION()
 		void HeathState(bool IsDamage, int Value);
 
@@ -38,11 +46,18 @@ public:
 		float WalkSpeed;
 	UPROPERTY(EditAnywhere, Category = Speed)
 		float RunSpeed;
+	UFUNCTION()
+		void Attach();
 
+	UPROPERTY()
+		AActor* GrabbedActor;
 protected:
 	void BeginPlay() override;
+
+	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+		TSubclassOf<AProjectile> ProjectileClass;
 	UFUNCTION()
-		void OnEPressed();
+		void Fire();
 	UFUNCTION()
 		void OnStartRun();
 	UFUNCTION()

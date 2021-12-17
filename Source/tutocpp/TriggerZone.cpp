@@ -12,33 +12,43 @@ ATriggerZone::ATriggerZone()
 	PrimaryActorTick.bCanEverTick = true;
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LAVA"));
 	RootComponent = MeshComponent;
-
+	//isDamage;
 	
 	
 }
 
 void ATriggerZone::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
+	GLog->Log("TriggerZone arh");
+
 	AtutocppCharacter* Character = Cast<AtutocppCharacter>(OtherActor);
+	FTimerDelegate timerDelegate;
+	timerDelegate.BindUFunction(this, FName("IsDamageZone"), Character);
+	GetWorldTimerManager().SetTimer(UnusedHandle, timerDelegate, 1, true);
 	if (Character == nullptr)
 	{
 		return;
 	}
-	GLog->Log("TriggerZone arh");
+	
 	
 }
-
+void ATriggerZone::IsDamageZone(AtutocppCharacter* Character)
+{
+	Character->HeathState(isDamage, 100);
+}
 void ATriggerZone::OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor)
 {
 	GLog->Log("TriggerZone out");
 	AtutocppCharacter* Character = Cast<AtutocppCharacter>(OtherActor);
-	
+	GetWorldTimerManager().ClearTimer(UnusedHandle);
 	if (Character == nullptr)
 	{
 		return;
 	}
 	
 }
+
+
 
 // Called when the game starts or when spawned
 void ATriggerZone::BeginPlay()
