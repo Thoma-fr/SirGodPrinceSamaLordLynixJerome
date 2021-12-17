@@ -154,7 +154,8 @@ void AtutocppCharacter::Attach()
 void AtutocppCharacter::Fire()
 {
 	GLog->Log("PAn PAn PAn Bang Ban Bang");
-	AProjectile* SpawnedActor = GetWorld()->SpawnActor<AProjectile>(ProjectileClass, SceneComponent->GetComponentLocation(),SceneComponent->GetComponentRotation());
+	AProjectile* spawnedprojectile = GetWorld()->SpawnActor<AProjectile>(AProjectileA, SceneComponent->GetComponentLocation(), FollowCamera->GetComponentRotation());
+	//AProjectile* bullet = GetWorld()->SpawnActor<AProjectile>(AProjectile, SceneComponent->GetComponentLocation(),SceneComponent->GetComponentRotation());
 
 }
 void AtutocppCharacter::OnStartRun()

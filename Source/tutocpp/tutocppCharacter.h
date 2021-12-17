@@ -51,11 +51,12 @@ public:
 
 	UPROPERTY()
 		AActor* GrabbedActor;
+		
 protected:
 	void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-		TSubclassOf<AProjectile> ProjectileClass;
+		TSubclassOf<AProjectile> AProjectileA;
 	UFUNCTION()
 		void Fire();
 	UFUNCTION()
