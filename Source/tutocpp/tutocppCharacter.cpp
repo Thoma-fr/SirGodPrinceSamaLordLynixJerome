@@ -24,6 +24,7 @@ AtutocppCharacter::AtutocppCharacter()
 	JumpMaxCount = 2;
 
 	SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Mesh"));
+	SceneComponent->SetRelativeLocation(FVector(80.f, 30.f, 0.f));
 	SceneComponent->SetupAttachment(RootComponent);
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;

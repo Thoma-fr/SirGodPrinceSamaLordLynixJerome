@@ -21,7 +21,7 @@ AProjectile::AProjectile()
     if (!RootComponent)
     {
         CollisionComponent = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComponent"));
-
+        
         CollisionComponent->InitSphereRadius(15.0f);
 
         RootComponent = CollisionComponent;
@@ -38,6 +38,7 @@ AProjectile::AProjectile()
         ProjectileMovementComponent->Bounciness = 0.3f;
         ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
     }
+    CollisionComponent->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 }
 
 // Called when the game starts or when spawned
@@ -54,10 +55,16 @@ void AProjectile::Tick(float DeltaTime)
 
 }
 
-void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+
+
+
+
+
+
+void AProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent,
 	FVector NormalImpulse, const FHitResult& Hit)
 {
-    GLog->Log("bullet go bing bong ");
+	GLog->Log("bullet go boing boing bing bong bong ");
 }
 
 void AProjectile::Fire()

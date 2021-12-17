@@ -21,7 +21,7 @@ class AtutocppCharacter : public ACharacter
 
 public:
 	AtutocppCharacter();
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 		class USceneComponent* SceneComponent;
 	UPROPERTY(VisibleAnywhere)
 		class UStaticMeshComponent* MeshComponent;
@@ -56,7 +56,7 @@ protected:
 	void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, Category = Projectile)
-		TSubclassOf<AProjectile> AProjectileA;
+		TSubclassOf<AActor> AProjectileA;
 	UFUNCTION()
 		void Fire();
 	UFUNCTION()

@@ -31,7 +31,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		UProjectileMovementComponent* ProjectileMovementComponent;
 	UFUNCTION()
-		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+		void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
 	UFUNCTION()
 		void Fire();
 	UFUNCTION()
