@@ -34,7 +34,7 @@ void ATriggerZone::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 }
 void ATriggerZone::IsDamageZone(AtutocppCharacter* Character)
 {
-	Character->HeathState(isDamage, 100);
+	Character->HeathState(isDamage, value);
 }
 void ATriggerZone::OnOverlapEnd(AActor* OverlappedActor, AActor* OtherActor)
 {

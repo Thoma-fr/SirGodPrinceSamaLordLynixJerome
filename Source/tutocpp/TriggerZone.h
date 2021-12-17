@@ -19,6 +19,8 @@ public:
 		class USceneComponent* SceneComponent;
 	UPROPERTY()
 		FTimerHandle timer;
+	UPROPERTY(EditAnywhere)
+		int value;
 	UPROPERTY(VisibleAnywhere)
 		class UStaticMeshComponent* MeshComponent;
 	UFUNCTION()
