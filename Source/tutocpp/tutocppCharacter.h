@@ -63,7 +63,7 @@ public:
 protected:
 	void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly, Category = Projectile)
+	UPROPERTY(EditAnywhere, Category = Projectile)
 		TSubclassOf<AActor> AProjectileA;
 	UFUNCTION()
 		void Fire();

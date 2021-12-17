@@ -30,7 +30,7 @@ AProjectile::AProjectile()
         ProjectileMovementComponent->ProjectileGravityScale = 0.0f;
     }
     //OnActorBeginOverlap->OnComponentHit.AddDynamic(this, &AProjectile::OnOverlapBegin);
-    InitialLifeSpan = 5;
+    //InitialLifeSpan = 5;
 }
 
 // Called when the game starts or when spawned
@@ -74,5 +74,6 @@ void AProjectile::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
     decal->SetDecalMaterial(DecallMat);
     decal->GetDecal()->DecalSize - FVector(100, 100, 100);
     decal->GetDecal()->SetFadeOut(1, 3, true);
+    Destroy();
 }
 

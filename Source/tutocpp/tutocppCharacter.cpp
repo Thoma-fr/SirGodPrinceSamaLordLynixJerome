@@ -64,12 +64,12 @@ void AtutocppCharacter::RagdoLize()
 
 	this->GetCharacterMovement()->DisableMovement();
 
-	/*AController* Controller = GetWorld()->GetFirstPlayerController();
+	Controller = GetWorld()->GetFirstPlayerController();
 	if(Controller==nullptr)
 	{
 		return;
 	}
-	Controller->UnPossess();*/
+	Controller->UnPossess();
 
 	GetWorldTimerManager().SetTimer(spawnDelay, this, &AtutocppCharacter::Respawn, 3, false);
 }
@@ -77,7 +77,7 @@ void AtutocppCharacter::RagdoLize()
 void AtutocppCharacter::Respawn()
 {
 	AtutocppCharacter* Character = GetWorld()->SpawnActor<AtutocppCharacter>(ActorSpawned, FVector(-490.000000, 503.556580, 462.000671), FRotator(0,0,0));
-	AController* controller = GetWorld()->GetFirstPlayerController();
+	Controller = GetWorld()->GetFirstPlayerController();
 	Controller->Possess(Character);
 }
 
@@ -275,6 +275,6 @@ void AtutocppCharacter::HeathState(bool IsDamage,int Value)
 	if (Health <=0)
 	{
 		
-		
+		RagdoLize();
 	}
 }

@@ -16,7 +16,8 @@ class TUTOCPP_API AProjectile : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AProjectile();
-
+	UPROPERTY(EditAnywhere, Category = DecallMat)
+		UMaterialInterface* DecallMat;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,6 +38,5 @@ public:
 
 	UFUNCTION()
 		void OnOverlapBegin(class AActor* OverlappedActor, class AActor* OtherActor);
-	UPROPERTY(EditAnywhere)
-		UMaterialInterface* DecallMat;
+	
 };
