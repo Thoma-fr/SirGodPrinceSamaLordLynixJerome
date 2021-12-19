@@ -76,7 +76,7 @@ void AtutocppCharacter::RagdoLize()
 
 void AtutocppCharacter::Respawn()
 {
-	AtutocppCharacter* Character = GetWorld()->SpawnActor<AtutocppCharacter>(ActorSpawned, FVector(-490.000000, 503.556580, 462.000671), FRotator(0,0,0));
+	AtutocppCharacter* Character = GetWorld()->SpawnActor<AtutocppCharacter>(ActorSpawned, FVector(-490.f, 503.f, 462.f), FRotator(0.f,0.f,0.f));
 	Controller = GetWorld()->GetFirstPlayerController();
 	Controller->Possess(Character);
 }
