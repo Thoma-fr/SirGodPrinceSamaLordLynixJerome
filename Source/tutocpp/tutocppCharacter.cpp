@@ -76,6 +76,7 @@ void AtutocppCharacter::RagdoLize()
 
 void AtutocppCharacter::Respawn()
 {
+	
 	AtutocppCharacter* Character = GetWorld()->SpawnActor<AtutocppCharacter>(ActorSpawned, FVector(-490.f, 503.f, 2862.f), FRotator(0.f,0.f,0.f));
 	Controller = GetWorld()->GetFirstPlayerController();
 	Controller->Possess(Character);
@@ -263,18 +264,19 @@ void AtutocppCharacter::HeathState(bool IsDamage,int Value)
 	
 	if(IsDamage)
 	{
-		Health -= Value;
+		health -= Value;
 		GLog->Log("Et la il meurt");
 	}
 	else
 	{
-		Health += Value;
+		health += Value;
 		GLog->Log("Et la il soigne");
 	}
 
-	if (Health <=0)
+	if (health <=0)
 	{
 		
 		RagdoLize();
+		isDead = true;
 	}
 }

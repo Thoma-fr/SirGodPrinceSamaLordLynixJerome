@@ -41,13 +41,15 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 	UPROPERTY(EditAnywhere)
-		int Health = 100;
+		int health = 100;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		bool isDead = false;
 	UPROPERTY()
 		bool isGrabbed;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
 		FVector MuzzleOffset;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category="MyBlueprint")
 		void HeathState(bool IsDamage, int Value);
 
 	UPROPERTY(EditAnywhere,Category=Speed)
